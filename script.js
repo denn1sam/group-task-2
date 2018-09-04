@@ -8,16 +8,33 @@ canvas.onmousemove = highlight;
 
 calcSize();
 
+function checkBorderColor() {
+    let colorBtn = document.getElementById('bg-color');
+    return colorBtn.value;
+}
+function checkBlockColor() {
+    let colorBtn = document.getElementById('block-color');
+    return colorBtn.value;
+}
+
+document.getElementById('generate-btn').addEventListener('click', GenerateNew);
+
+function GenerateNew() {
+    ctx.strokeStyle = checkBorderColor();
+    ctx.fillStyle = checkBlockColor();
+//    canvas.style.canvas = 'border: 1x solid ' + checkBorderColor();
+    render();
+}
 function calcSize() {
     canvas.width = w = window.innerWidth / 2;
     canvas.height = h = window.innerHeight / 2;
 
     tileWidth = w / columns;
     tileHeight = h / rows;
-
+    
     ctx.strokeStyle = '#929292';
-    ctx.fillStyle = '#f70';
-
+    ctx.fillStyle = '#ff7700';
+    
     render();
 }
 function render() {
@@ -34,6 +51,7 @@ function render() {
         ctx.moveTo(0, y * tileHeight);
         ctx.lineTo(w, y * tileHeight);
     }
+    
     ctx.stroke();
 }
 function highlight(e) {

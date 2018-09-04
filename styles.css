@@ -12,10 +12,6 @@ body {
     justify-content: center;
 }
 
-#canvas {
-    border: 1px solid #929292;
-}
-
 .color {
     border: none;
     padding: 0 2px;
