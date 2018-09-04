@@ -1,4 +1,7 @@
-
+body {
+    font-family: sans-serif;
+    font-size: 0.9em;
+}
 
 #wrap {
     /* padding: 0;
@@ -9,3 +12,35 @@
     justify-content: center;
 }
 
+#canvas {
+    border: 1px solid #929292;
+}
+
+.color {
+    border: none;
+    padding: 0 2px;
+    margin: 10px;
+    width: 60px;
+    height: 25px;
+}
+
+#buttons {
+    margin: 20px auto;
+    text-align: center;
+}
+
+.margin-r {
+    margin-right: 100px;
+}
+
+#generate-btn {
+    background: #17dfb5;
+    padding: 5px;
+    border-radius: 6px;
+    border: 1px solid #37c3a2;
+    outline : none; 
+    transition-duration: 1s;
+}
+#generate-btn:hover {
+    background: #37c3a2;
+}

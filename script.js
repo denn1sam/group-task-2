@@ -15,7 +15,7 @@ function calcSize() {
     tileWidth = w / columns;
     tileHeight = h / rows;
 
-    ctx.strokeStyle = '#000';
+    ctx.strokeStyle = '#929292';
     ctx.fillStyle = '#f70';
 
     render();
