@@ -3,6 +3,12 @@ body {
     font-size: 0.9em;
 }
 
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
 #wrap {
     /* padding: 0;
     margin: 0;
@@ -34,9 +40,46 @@ body {
     padding: 5px;
     border-radius: 6px;
     border: 1px solid #37c3a2;
-    outline : none; 
+    outline: none;
     transition-duration: 1s;
 }
+
 #generate-btn:hover {
     background: #37c3a2;
+}
+
+.parent-rect {
+    width: 405px;
+    height: 304px;
+    background-color: grey;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.parent-block-start {
+    width: 400;
+    height: 300;
+}
+
+.parent-block {
+    display: grid;
+    background-color: 'none';
+}
+
+.child-block {
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.bigger_width {
+    grid-column-gap: 'px;
+    justify-content: stretch;
+}
+
+.bigger_height {
+    grid-row-gap: 2px;
+    align-content: stretch;
 }

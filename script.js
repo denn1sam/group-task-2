@@ -1,74 +1,105 @@
-var ctx = canvas.getContext('2d'),
-    columns = 3,
-    rows = 3,
-    w, h, tileWidth, tileHeight;
+let parentRect = document.querySelector('.parent-rect').children[0];
 
-canvas.onresize = calcSize;
-canvas.onmousemove = highlight;
+const MIN_NUMBER_OF_BLOCKS = 9;
+const MAX_NUMBER_OF_BLOCKS = 4000;
+let randomNumber;
+let coeficientOfDividing;
+let totalNumberOfBlocks = 1;
 
-calcSize();
+function generateGrid(parentBlock) {
 
-function checkBorderColor() {
-    let colorBtn = document.getElementById('bg-color');
-    return colorBtn.value;
-}
-function checkBlockColor() {
-    let colorBtn = document.getElementById('block-color');
-    return colorBtn.value;
-}
+    // condition to get out from recursion (need to be improved)
+    if (totalNumberOfBlocks < randomNumber) {
 
-document.getElementById('generate-btn').addEventListener('click', GenerateNew);
+        const parentW = parentBlock.offsetWidth;
+        const parentH = parentBlock.offsetHeight;
+        let childWidthBlockAPercent;
+        let childHeightBlockAPercent;
+        let childWidthBlockBPercent;
+        let childHeightBlockBPercent;
+        let childWidth;
+        let childHeight;
 
-function GenerateNew() {
-    ctx.strokeStyle = checkBorderColor();
-    ctx.fillStyle = checkBlockColor();
-//    canvas.style.canvas = 'border: 1x solid ' + checkBorderColor();
-    render();
-}
-function calcSize() {
-    canvas.width = w = window.innerWidth / 2;
-    canvas.height = h = window.innerHeight / 2;
+        let randomPercentToDivide = getRandomIntInclusive(25, 75);
 
-    tileWidth = w / columns;
-    tileHeight = h / rows;
-    
-    ctx.strokeStyle = '#929292';
-    ctx.fillStyle = '#ff7700';
-    
-    render();
-}
-function render() {
+        // condition to get out from recursion (need to be improved)
+        if ((parentW*parentH > coeficientOfDividing)) {
 
-    ctx.clearRect(0, 0, w, h);
+            if (parentW >= parentH) {
+                childWidthBlockAPercent = randomPercentToDivide;
+                childWidthBlockBPercent = 100 - childWidthBlockAPercent;
+                parentBlock.style.gridTemplateColumns = `${(parentW * childWidthBlockAPercent / 100) - 1.5} ${(parentW * childWidthBlockBPercent / 100) - 1.5}`
+                parentBlock.setAttribute('class', 'parent-block bigger_width');
+                parentBlock.style.gridTemplateRows = `${parentH}`;
+            } else {
+                childHeightBlockAPercent = randomPercentToDivide;
+                childHeightBlockBPercent = 100 - childHeightBlockAPercent;
+                parentBlock.style.gridTemplateRows = `${(parentH * childHeightBlockAPercent/100) - 1.5} ${(parentH * childHeightBlockBPercent/100) - 1.5}`
+                parentBlock.setAttribute('class', 'parent-block bigger_height');
+                parentBlock.style.gridTemplateColumns = `${parentW}`;
+            }
 
-    ctx.beginPath();
 
-    for (var x = 0; x < columns; x++) {
-        ctx.moveTo(x * tileWidth, 0);
-        ctx.lineTo(x * tileWidth, h);
+            totalNumberOfBlocks++;
+            const divBlockA = document.createElement('div');
+            divBlockA.setAttribute('class', 'child-block');
+            divBlockA.setAttribute('id', totalNumberOfBlocks + 'a');
+
+            const divBlockB = document.createElement('div');
+            divBlockB.setAttribute('class', 'child-block');
+            divBlockB.setAttribute('id', totalNumberOfBlocks + 'b');
+
+
+
+            parentBlock.appendChild(divBlockA);
+            parentBlock.appendChild(divBlockB);
+
+            generateGrid(divBlockA);
+            generateGrid(divBlockB);
+
+        }
     }
-    for (var y = 0; y < rows; y++) {
-        ctx.moveTo(0, y * tileHeight);
-        ctx.lineTo(w, y * tileHeight);
-    }
-    
-    ctx.stroke();
+
 }
-function highlight(e) {
+document.getElementById('generate-btn').addEventListener('click', function(){
+    
+    randomNumber = getRandomIntInclusive(MIN_NUMBER_OF_BLOCKS, MAX_NUMBER_OF_BLOCKS);
+    let parentBlock = document.querySelector('.parent-rect').children[0];
+    coeficientOfDividing = parentBlock.offsetWidth*parentBlock.offsetHeight/randomNumber;;
 
-    var rect = canvas.getBoundingClientRect(),
-        mx = e.clientX - rect.left,
-        my = e.clientY - rect.top,
+    if (totalNumberOfBlocks !== 1){
+        totalNumberOfBlocks = 1;
+        let mainRect = parentBlock.parentElement;
+        mainRect.removeChild(parentBlock);
+        const newParentBlock = document.createElement('div');
+        newParentBlock.setAttribute('class', 'parent-block-start');
+        mainRect.appendChild(newParentBlock);
+        parentBlock = document.querySelector('.parent-block-start');
+    }
+     generateGrid(parentBlock);
+   
 
-        /// get index from mouse position
-        xIndex = Math.round((mx - tileWidth * 0.5) / tileWidth),
-        yIndex = Math.round((my - tileHeight * 0.5) / tileHeight);
+});
 
-    render();
+function changeBackgroundColor(e){
 
-    ctx.fillRect(xIndex * tileWidth,
-        yIndex * tileHeight,
-        tileWidth,
-        tileHeight);
+    let colorBtnColor = document.getElementById('bg-color').value;
+    let mainRect = document.querySelector('.parent-rect');
+    mainRect.style.backgroundColor = colorBtnColor;
 
+}
+
+let backGroundInputEl = document.getElementById('bg-color');
+
+backGroundInputEl.addEventListener('input', changeBackgroundColor);
+
+function getRandomInt(max) {
+    return Math.floor(Math.random() * Math.floor(max));
+}
+
+function getRandomIntInclusive(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    let valueToMakeMaxInclusive = 1;
+    return Math.floor(Math.random() * (max - min + valueToMakeMaxInclusive)) + min;
 }
